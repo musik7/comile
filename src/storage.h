@@ -21,48 +21,6 @@ struct KeyValuePair {
     KeyValuePair* next;
 };
 
-struct IndexedDBIndex {
-    StringView name;
-    StringView key_path;
-    bool unique;
-    bool multi_entry;
-    IndexedDBIndex* next;
-};
-
-struct IndexedDBObjectStore {
-    StringView name;
-    StringView key_path;
-    bool auto_increment;
-    size_t record_count;
-    IndexedDBIndex* first_index;
-    IndexedDBObjectStore* next;
-};
-
-struct IndexedDBDatabase {
-    uint32_t id;
-    StringView name;
-    uint32_t version;
-    IndexedDBObjectStore* first_store;
-    size_t store_count;
-    IndexedDBDatabase* next;
-};
-
-struct CacheEntry {
-    StringView url;
-    uint32_t status;
-    StringView body;
-    size_t size;
-    CacheEntry* next;
-};
-
-struct CacheStorageCache {
-    StringView name;
-    size_t entry_count;
-    size_t total_size;
-    CacheEntry* first_entry;
-    CacheStorageCache* next;
-};
-
 struct IndexedDBRecord {
     StringView key;
     StringView value;
@@ -94,6 +52,22 @@ struct IndexedDBDatabase {
     IndexedDBObjectStore* first_store;
     size_t store_count;
     IndexedDBDatabase* next;
+};
+
+struct CacheEntry {
+    StringView url;
+    uint32_t status;
+    StringView body;
+    size_t size;
+    CacheEntry* next;
+};
+
+struct CacheStorageCache {
+    StringView name;
+    size_t entry_count;
+    size_t total_size;
+    CacheEntry* first_entry;
+    CacheStorageCache* next;
 };
 
 struct WebManifest {
@@ -326,6 +300,10 @@ public:
         ls_count++;
     }
 
+    void add_local_storage(StringView key, StringView value) {
+        set_local_storage(key, value);
+    }
+
     StringView get_local_storage(StringView key) {
         KeyValuePair* curr = first_local_storage;
         while (curr) {
@@ -378,6 +356,10 @@ public:
         pair->next = first_session_storage;
         first_session_storage = pair;
         ss_count++;
+    }
+
+    void add_session_storage(StringView key, StringView value) {
+        set_session_storage(key, value);
     }
 
     StringView get_session_storage(StringView key) {
