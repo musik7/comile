@@ -17,6 +17,8 @@ jobs:
             -nostdlib \
             -Wl,--no-entry \
             -Wl,--export-all \
+            -Wl,--lto-O3 \
+            -Wl,--allow-undefined \
             -msimd128 \
             -o brain.wasm \
             src/brain.cpp
